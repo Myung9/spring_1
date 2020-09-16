@@ -2,6 +2,7 @@ package com.myung9.spring.project1.Mycontact.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
+@ToString
 public class Person {
     @Id
     @GeneratedValue //자동으로 생성
@@ -34,17 +36,5 @@ public class Person {
 
     //cmd n
 
-    @Override
-    public String toString() {
-        return "Person{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", hobby='" + hobby + '\'' +
-                ", bloodType='" + bloodType + '\'' +
-                ", address='" + address + '\'' +
-                ", birthday=" + birthday +
-                ", job='" + job + '\'' +
-                '}';
-    }
+
 }
