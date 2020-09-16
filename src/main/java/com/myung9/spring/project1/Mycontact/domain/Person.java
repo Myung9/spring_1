@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@ToString(exclude = "phoneNumber")
+@ToString
 public class Person {
     @Id
     @GeneratedValue //자동으로 생성
@@ -34,6 +34,7 @@ public class Person {
 
     private String job;
 
+    @ToString.Exclude
     private String phoneNumber;
     //cmd n
 
