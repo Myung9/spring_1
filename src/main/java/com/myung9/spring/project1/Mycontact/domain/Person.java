@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
 
+@Getter
+@Setter
 @Entity
 public class Person {
     @Id
@@ -15,41 +17,34 @@ public class Person {
     private Long id; //person 객체 하나하나를 유니크하게
 
     //lombok Getter, Setter로 대체
-    @Getter
-    @Setter
+
     private  String name;
 
-    @Getter
-    @Setter
     private int age;
 
-    @Getter
-    @Setter
     private String hobby;
 
-    @Getter
-    @Setter
     private String bloodType;
 
-    @Getter
-    @Setter
     private String address;
 
-    @Getter
-    @Setter
     private LocalDate birthday;
 
-    @Getter
-    @Setter
     private String job;
 
     //cmd n
+
     @Override
     public String toString() {
         return "Person{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", age=" + age +
+                ", hobby='" + hobby + '\'' +
+                ", bloodType='" + bloodType + '\'' +
+                ", address='" + address + '\'' +
+                ", birthday=" + birthday +
+                ", job='" + job + '\'' +
                 '}';
     }
 }

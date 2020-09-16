@@ -26,12 +26,14 @@ class PersonRepositoryTest {
 
         personRepository.save(person);
 
-//        System.out.println(personRepository.findAll()); // 전체 데이터를 다가져옴
+        System.out.println(personRepository.findAll()); // 전체 데이터를 다가져옴
+
         List<Person> people = personRepository.findAll();
 
         assertThat(people.size()).isEqualTo(1);
         assertThat(people.get(0).getName()).isEqualTo("myung9");
         assertThat(people.get(0).getAge()).isEqualTo(31);
+        assertThat(people.get(0).getBloodType()).isEqualTo("O");
 
     }
 }
