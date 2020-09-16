@@ -22,6 +22,7 @@ class PersonRepositoryTest {
         Person person = new Person();
         person.setName("myung9");
         person.setAge(31);
+        person.setBloodType("O");
 
         personRepository.save(person);
 

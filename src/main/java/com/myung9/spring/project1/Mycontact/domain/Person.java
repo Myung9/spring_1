@@ -1,8 +1,12 @@
 package com.myung9.spring.project1.Mycontact.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDate;
 
 @Entity
 public class Person {
@@ -10,33 +14,34 @@ public class Person {
     @GeneratedValue //자동으로 생성
     private Long id; //person 객체 하나하나를 유니크하게
 
+    //lombok Getter, Setter로 대체
+    @Getter
+    @Setter
     private  String name;
 
+    @Getter
+    @Setter
     private int age;
 
-    public Long getId() {
-        return id;
-    }
+    @Getter
+    @Setter
+    private String hobby;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Getter
+    @Setter
+    private String bloodType;
 
-    public String getName() {
-        return name;
-    }
+    @Getter
+    @Setter
+    private String address;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @Getter
+    @Setter
+    private LocalDate birthday;
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
+    @Getter
+    @Setter
+    private String job;
 
     //cmd n
     @Override
