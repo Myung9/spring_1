@@ -1,6 +1,7 @@
 package com.myung9.spring.project1.Mycontact.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @ToString
+@NoArgsConstructor
 public class Person {
     @Id
     @GeneratedValue //자동으로 생성
