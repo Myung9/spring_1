@@ -50,5 +50,4 @@ class PersonRepositoryTest {
         System.out.println(map);
         System.out.println(map.get(person2));
     }
-
 }

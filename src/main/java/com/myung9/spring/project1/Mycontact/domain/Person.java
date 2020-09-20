@@ -10,13 +10,10 @@ import java.time.LocalDate;
 
 
 @Entity
-@Getter
-@Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
-@EqualsAndHashCode
+@Data
 public class Person {
     @Id
     @GeneratedValue //자동으로 생성
