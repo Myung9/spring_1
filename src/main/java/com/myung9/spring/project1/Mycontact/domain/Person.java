@@ -16,6 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class Person {
     @Id
     @GeneratedValue //자동으로 생성
@@ -30,6 +31,7 @@ public class Person {
 
     private String hobby;
 
+    @NonNull
     private String bloodType;
 
     private String address;
@@ -56,6 +58,7 @@ public class Person {
     }
     */
     //equals를 해줘야 제대로 비교가능
+    /*
     public boolean equals(Object object){
         if(object == null){
             return false;
@@ -71,4 +74,6 @@ public class Person {
     public int hashCode(){
         return (name + age).hashCode();
     }
+    */
+
 }
