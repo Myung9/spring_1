@@ -67,4 +67,8 @@ public class Person {
         }
         return true;
     }
+    //해쉬코드 오버라이딩
+    public int hashCode(){
+        return (name + age).hashCode();
+    }
 }
