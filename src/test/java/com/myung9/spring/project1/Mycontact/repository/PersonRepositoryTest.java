@@ -21,6 +21,7 @@ class PersonRepositoryTest {
         person.setAge(31);
         person.setBloodType("O");
 
+
         personRepository.save(person);
 
         System.out.println(personRepository.findAll()); // 전체 데이터를 다가져옴
@@ -31,6 +32,15 @@ class PersonRepositoryTest {
         assertThat(people.get(0).getName()).isEqualTo("myung9");
         assertThat(people.get(0).getAge()).isEqualTo(31);
         assertThat(people.get(0).getBloodType()).isEqualTo("O");
-
     }
+    @Test
+    void hashCodeAndEquals(){
+        Person person1 = new Person("myung9", 31);
+        Person person2 = new Person("myung9", 31);
+
+        System.out.println(person1.equals(person2));
+        System.out.println(person1.hashCode());
+        System.out.println(person2.hashCode());
+    }
+
 }
