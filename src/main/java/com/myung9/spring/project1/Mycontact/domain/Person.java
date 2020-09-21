@@ -39,7 +39,14 @@ public class Person {
 
     @ToString.Exclude
     private String phoneNumber;
-    //cmd n
+
+    private boolean block;
+
+    private String blcokReason;
+
+    private LocalDate blockStartDate;
+
+    private LocalDate blockEndDate;
 
     /*
     public Person(Long id, @NonNull String name, @NonNull int age, String hobby, String bloodType, String address, LocalDate birthday, String job, String phoneNumber) {
