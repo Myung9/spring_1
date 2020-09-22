@@ -1,10 +1,12 @@
 package com.myung9.spring.project1.Mycontact.domain;
 
+
 import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.time.LocalDate;
 
 
@@ -40,13 +42,8 @@ public class Person {
     @ToString.Exclude
     private String phoneNumber;
 
-    private boolean block;
-
-    private String blcokReason;
-
-    private LocalDate blockStartDate;
-
-    private LocalDate blockEndDate;
+    @OneToOne
+    private Block block;
 
     /*
     public Person(Long id, @NonNull String name, @NonNull int age, String hobby, String bloodType, String address, LocalDate birthday, String job, String phoneNumber) {

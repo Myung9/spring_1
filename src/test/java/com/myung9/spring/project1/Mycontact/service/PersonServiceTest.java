@@ -27,22 +27,30 @@ class PersonServiceTest {
 
         List<Person> result = personService.getPeopleExcludeBlocks();
 
-        System.out.println(result);
+//        System.out.println(result);
+        result.forEach(System.out::println); // 리스트에 객체가 각 한 줄씩 노출
+    }
+    private void givenBlockPerson(String name, int age, String bloodType){
+        Person blockPerson = new Person(name, age, bloodType);
+        blockPerson.setBlock(givenBlock(name));
+
+        personRepository.save(blockPerson);
     }
 
     private void givenBlocks() {
         givenBlock("myung9");
     }
 
-    private void givenBlock(String name) {
-        blockRepository.save(new Block(name));
+    private Block givenBlock(String name) {
+
+        return blockRepository.save(new Block(name));
     }
 
     private void givenPeople() {
         givenPerson("myung9", 31, "O");
         givenPerson("myung8", 32, "O");
-        givenPerson("myung7", 33, "O");
-        givenPerson("myung6", 34, "O");
+        givenBlockPerson("myung7", 33, "O");
+        givenBlockPerson("myung9", 34, "O");
     }
 
     private void givenPerson(String name, int age, String bloodType) {
