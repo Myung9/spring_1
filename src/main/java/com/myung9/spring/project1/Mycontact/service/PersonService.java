@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j // lombok에서 제공
@@ -24,8 +23,16 @@ public class PersonService {
 //        List<String> blockNames = blocks.stream().map(Block::getName).collect(Collectors.toList());
 
 //        return people.stream().filter(person -> blockNames.contains(person.getName())).collect(Collectors.toList());
-        return people.stream().filter(person -> person.getBlock() == null).collect(Collectors.toList());
+//        return people.stream().filter(person -> person.getBlock() == null).collect(Collectors.toList());
         /*block데이터가 없는 사람들만 가져온다*/
+        return personRepository.findByBlockIsNull();
+    }
+
+    public List<Person> getPeopleByName(String name){
+//        List<Person> people = personRepository.findAll();
+//
+//        return people.stream().filter(person -> person.getName().equals(name)).collect(Collectors.toList());
+        return personRepository.findByName(name); //query 조건으로 where기능
     }
 
     @Transactional(readOnly = true)

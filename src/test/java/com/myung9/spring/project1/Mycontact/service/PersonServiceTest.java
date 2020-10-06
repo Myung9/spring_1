@@ -24,11 +24,9 @@ class PersonServiceTest {
     @Test
     void getPeopleExcludeBlocks(){
         givenPeople();
-        givenBlocks();
 
         List<Person> result = personService.getPeopleExcludeBlocks();
 
-//        System.out.println(result);
         result.forEach(System.out::println); // 리스트에 객체가 각 한 줄씩 노출
     }
 
@@ -66,6 +64,14 @@ class PersonServiceTest {
         System.out.println(person);
     }
 
+    @Test
+    void getPeopleByName(){
+        givenPeople();
+
+        List<Person> result = personService.getPeopleByName("myung9");
+        result.forEach(System.out::println);
+    }
+
 
     private void givenBlockPerson(String name, int age, String bloodType){
         Person blockPerson = new Person(name, age, bloodType);
@@ -85,8 +91,8 @@ class PersonServiceTest {
     }
 
     private void givenPeople() {
-        givenBlockPerson("myung9", 31, "O");
-        givenBlockPerson("myung8", 32, "O");
+        givenPerson("myung9", 31, "O");
+        givenPerson("myung8", 32, "O");
         givenBlockPerson("myung7", 33, "O");
         givenBlockPerson("myung9", 34, "O");
     }

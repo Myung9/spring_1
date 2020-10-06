@@ -40,7 +40,7 @@ public class Person {
     private String phoneNumber;
 
 //    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})  // person entity에서 block에 대한 영속성을 함께 관리하겠다
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER, optional = false) // optional = false로 block객체의 값은 항상 필요하다
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) // optional = false로 block객체의 값은 항상 필요하다
     @ToString.Exclude //불필요한 query 호출을 줄이는데 도움이 됨
     private Block block;
     //CascadeType.MERGE를 해서 Test의 'start date' 'end date'를 출력하게 한다

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,5 +50,46 @@ class PersonRepositoryTest {
 
         System.out.println(map);
         System.out.println(map.get(person2));
+    }
+
+    @Test
+    void findByBloodType(){
+        givenPerson("myung9", 31, "O");
+        givenPerson("myung8", 32, "O");
+        givenPerson("myung7", 33, "Ooo");
+        givenPerson("myung6", 34, "Oooo");
+        givenPerson("ebenny", 6, "O");
+        givenPerson("abenny", 6, "A");
+
+        List<Person> result = personRepository.findByBloodType("O");
+
+
+        result.forEach(System.out::println);
+    }
+
+    @Test
+    void findByBirthdayBetween(){
+        givenPerson("myung9", 31, "O", LocalDate.of(1990, 7, 9));
+        givenPerson("myung8", 32, "O", LocalDate.of(1991, 4, 3));
+        givenPerson("myung7", 33, "Ooo", LocalDate.of(1990, 7, 21));
+        givenPerson("myung6", 34, "Oooo", LocalDate.of(1991, 3, 6));
+        givenPerson("ebenny", 6, "O", LocalDate.of(1990, 4, 3));
+        givenPerson("abenny", 6, "A", LocalDate.of(1991, 4, 21));
+
+        List<Person> result = personRepository.findByBirthdayBetween(LocalDate.of(1990, 7, 1), LocalDate.of(1990, 7, 31));
+
+        result.forEach(System.out::println);
+    }
+
+    //임시 대안으로 메소드 오버로딩
+    private void givenPerson(String name, int age, String bloodType){
+        givenPerson(name, age, bloodType, null);
+    }
+
+    private void givenPerson(String name, int age, String bloodType, LocalDate birthday){
+        Person person = new Person(name, age, bloodType);
+        person.setBirthday(birthday);
+
+        personRepository.save(person);
     }
 }
