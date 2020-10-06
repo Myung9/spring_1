@@ -1,10 +1,10 @@
 package com.myung9.spring.project1.Mycontact.domain;
 
 
+import com.myung9.spring.project1.Mycontact.domain.dto.Birthday;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 
 
@@ -32,7 +32,8 @@ public class Person {
 
     private String address;
 
-    private LocalDate birthday;
+    @Embedded
+    private Birthday birthday;
 
     private String job;
 
