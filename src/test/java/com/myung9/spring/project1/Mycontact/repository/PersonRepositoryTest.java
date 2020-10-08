@@ -89,7 +89,7 @@ class PersonRepositoryTest {
 
     private void givenPerson(String name, int age, String bloodType, LocalDate birthday){
         Person person = new Person(name, age, bloodType);
-        person.setBirthday(new Birthday(birthday.getYear(), birthday.getMonthValue(), birthday.getDayOfMonth()));
+        person.setBirthday(new Birthday(birthday));
 
         personRepository.save(person);
     }

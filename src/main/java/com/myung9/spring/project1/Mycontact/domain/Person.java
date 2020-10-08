@@ -5,7 +5,7 @@ import com.myung9.spring.project1.Mycontact.domain.dto.Birthday;
 import lombok.*;
 
 import javax.persistence.*;
-
+import javax.validation.Valid;
 
 
 @Entity
@@ -32,6 +32,7 @@ public class Person {
 
     private String address;
 
+    @Valid
     @Embedded
     private Birthday birthday;
 
