@@ -37,7 +37,9 @@ public class PersonService {
 
     @Transactional(readOnly = true)
     public Person getPerson(Long id){
-        Person person = personRepository.findById(id).get();
+//        Person person = personRepository.findById(id).get(); // 값의 유무를 확인하지 않고 get해서 warnning발
+        Person person = personRepository.findById(id).orElse(null);// java7에서 부터 지원하는 orElse()
+        // -> 가지고 있는 값이 없으면 null을 return
 
 //        System.out.println("person : " + person);
         log.info("person : {}", person); //production code에서는 systemout보다 log를 사용하는 것이 좋음
