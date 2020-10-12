@@ -15,7 +15,7 @@ import javax.validation.Valid;
 @Data
 public class Person {
     @Id
-    @GeneratedValue //자동으로 생성
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // data.sql을 이용해서 넣는 값과 personRepository에서 넣는값이 충돌나서 strategy를 설정
     private Long id; //person 객체 하나하나를 유니크하게
 
     //lombok Getter, Setter로 대체
