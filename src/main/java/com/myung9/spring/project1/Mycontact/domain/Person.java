@@ -1,8 +1,12 @@
 package com.myung9.spring.project1.Mycontact.domain;
 
 
+//import antlr.StringUtils;
+
+import com.myung9.spring.project1.Mycontact.controller.dto.PersonDto;
 import com.myung9.spring.project1.Mycontact.domain.dto.Birthday;
 import lombok.*;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -87,5 +91,27 @@ public class Person {
         return (name + age).hashCode();
     }
     */
-
+    public void set(PersonDto personDto){ // personDto의 setter
+        if(personDto.getAge() != 0){
+            this.setAge(personDto.getAge());
+        }
+        if (!StringUtils.isEmpty(personDto.getHobby())){
+            this.setHobby(personDto.getHobby());
+        }
+        if(!StringUtils.isEmpty(personDto.getHobby())){
+            this.setHobby(personDto.getHobby());
+        }
+        if(!StringUtils.isEmpty(personDto.getBloodType())){
+            this.setBloodType(personDto.getBloodType());
+        }
+        if(!StringUtils.isEmpty(personDto.getAddress())){
+            this.setAddress(personDto.getAddress());
+        }
+        if(!StringUtils.isEmpty(personDto.getJob())) {
+            this.setJob(personDto.getJob());
+        }
+        if(!StringUtils.isEmpty(personDto.getPhoneNumber())){
+            this.setPhoneNumber(personDto.getPhoneNumber());
+        }
+    }
 }

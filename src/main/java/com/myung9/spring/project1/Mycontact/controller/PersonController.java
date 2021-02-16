@@ -1,5 +1,6 @@
 package com.myung9.spring.project1.Mycontact.controller;
 
+import com.myung9.spring.project1.Mycontact.controller.dto.PersonDto;
 import com.myung9.spring.project1.Mycontact.domain.Person;
 import com.myung9.spring.project1.Mycontact.repository.PersonRepository;
 import com.myung9.spring.project1.Mycontact.service.PersonService;
@@ -29,5 +30,19 @@ public class PersonController {
         personService.put(person);
 
         log.info("person -> {} ", personRepository.findAll());
+    }
+
+    @PutMapping("/{id}")
+    public void modifyPerson(@PathVariable Long id, @RequestBody PersonDto personDto){//json body를 받기 위해서 requestbody
+        //Rest규약에 맞춰서 id에도 PathVariable
+        personService.modify(id, personDto);
+
+        log.info("person -> {} ", personRepository.findAll());
+    }
+    //진짜 이름이 바뀌는경우 별도의 api를 통해서 이름을 update
+    @PatchMapping("/{id}")//
+    public void modifyPerson(@PathVariable Long id, String name){
+        personService.modify(id, name);//dto대신 StringValue를 사용
+        log.info("person -> {}", personRepository.findAll());
     }
 }
