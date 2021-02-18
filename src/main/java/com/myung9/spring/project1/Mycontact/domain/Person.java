@@ -35,11 +35,6 @@ public class Person {
 
     private String hobby;
 
-    @NonNull
-    @NotEmpty
-    @Column(nullable = false)
-    private String bloodType;
-
     private String address;
 
     @Valid
@@ -48,60 +43,17 @@ public class Person {
 
     private String job;
 
-    @ToString.Exclude
     private String phoneNumber;
 
     @ColumnDefault("0") // 0 : false
     private boolean deleted;
 
-//    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})  // person entity에서 block에 대한 영속성을 함께 관리하겠다
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) // optional = false로 block객체의 값은 항상 필요하다
-    @ToString.Exclude //불필요한 query 호출을 줄이는데 도움이 됨
-    private Block block;
-    //CascadeType.MERGE를 해서 Test의 'start date' 'end date'를 출력하게 한다
-    //CascadeType.REMOVE를 해서 Test에서의 entity를 수정한다
-    //CascadeType.ALL로 하면 전체가 다 적용됨
-
-    /*
-    public Person(Long id, @NonNull String name, @NonNull int age, String hobby, String bloodType, String address, LocalDate birthday, String job, String phoneNumber) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.hobby = hobby;
-        this.bloodType = bloodType;
-        this.address = address;
-        this.birthday = birthday;
-        this.job = job;
-        this.phoneNumber = phoneNumber;
-    }
-    */
-    //equals를 해줘야 제대로 비교가능
-    /*
-    public boolean equals(Object object){
-        if(object == null){
-            return false;
-        }
-        Person person = (Person) object;
-
-        if(!person.getName().equals(this.getName())){
-            return false;
-        }
-        return true;
-    }
-    //해쉬코드 오버라이딩
-    public int hashCode(){
-        return (name + age).hashCode();
-    }
-    */
     public void set(PersonDto personDto){ // personDto의 setter
         if (!StringUtils.isEmpty(personDto.getHobby())){
             this.setHobby(personDto.getHobby());
         }
         if(!StringUtils.isEmpty(personDto.getHobby())){
             this.setHobby(personDto.getHobby());
-        }
-        if(!StringUtils.isEmpty(personDto.getBloodType())){
-            this.setBloodType(personDto.getBloodType());
         }
         if(!StringUtils.isEmpty(personDto.getAddress())){
             this.setAddress(personDto.getAddress());
@@ -111,6 +63,9 @@ public class Person {
         }
         if(!StringUtils.isEmpty(personDto.getPhoneNumber())){
             this.setPhoneNumber(personDto.getPhoneNumber());
+        }
+        if(personDto.getBirthday() != null){
+            this.setBirthday(Birthday.of(personDto.getBirthday()));
         }
     }
 
