@@ -12,8 +12,8 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDate;
 
 
 @Entity
@@ -32,10 +32,6 @@ public class Person {
     @NotEmpty
     @Column(nullable = false)
     private String name;
-
-    @NonNull
-    @Min(1)
-    private int age;
 
     private String hobby;
 
@@ -98,9 +94,6 @@ public class Person {
     }
     */
     public void set(PersonDto personDto){ // personDto의 setter
-        if(personDto.getAge() != 0){
-            this.setAge(personDto.getAge());
-        }
         if (!StringUtils.isEmpty(personDto.getHobby())){
             this.setHobby(personDto.getHobby());
         }
@@ -119,5 +112,20 @@ public class Person {
         if(!StringUtils.isEmpty(personDto.getPhoneNumber())){
             this.setPhoneNumber(personDto.getPhoneNumber());
         }
+    }
+
+
+    public Integer getAge(){ // primitive Type은 null이 안되기 때문에 wrapper type으로 리턴
+        if(this.birthday != null) {
+            return LocalDate.now().getYear() - this.birthday.getYearOfBirthday() + 1;
+        }
+        else{
+//            return Integer.parseInt(null);
+            return null;
+        }
+    }
+
+    public boolean isBirthdayToday(){
+        return LocalDate.now().equals(LocalDate.of(this.birthday.getYearOfBirthday(), this.birthday.getMonthOfBirthday(), this.birthday.getDayOfBirthday()));
     }
 }
