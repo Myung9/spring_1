@@ -45,4 +45,11 @@ public class PersonController {
         personService.modify(id, name);//dto대신 StringValue를 사용
         log.info("person -> {}", personRepository.findAll());
     }
+
+    @DeleteMapping("/{id}")
+    public void deletePerson(@PathVariable Long id){
+        personService.delete(id);
+
+        log.info("person -> {}", personRepository.findAll());
+    }
 }

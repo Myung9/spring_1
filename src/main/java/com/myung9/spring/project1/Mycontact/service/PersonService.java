@@ -81,9 +81,25 @@ public class PersonService {
 
     @Transactional
     public void modify(Long id, String name) { // id값을받아서 이름만 수정하는 로직
-        Person person = personRepository.findById(id).orElseThrow(()->new RuntimeException("아이디가 존재하지 않습니다/"));
+        Person person = personRepository.findById(id).orElseThrow(()->new RuntimeException("아이디가 존재하지 않습니다."));
 
         person.setName(name);
+        personRepository.save(person);
+    }
+
+    @Transactional
+    public void delete(Long id){
+        /*
+        Person person = personRepository.findById(id).orElseThrow(()->new RuntimeException("아이디가 존재하지 않습니다."));
+
+        personRepository.delete(person);
+         */
+//        personRepository.deleteById(id);
+
+        Person person = personRepository.findById(id).orElseThrow(()-> new RuntimeException("아이디가 존재하지 않습니다."));
+
+        person.setDeleted(true);
+
         personRepository.save(person);
     }
 }

@@ -6,6 +6,8 @@ package com.myung9.spring.project1.Mycontact.domain;
 import com.myung9.spring.project1.Mycontact.controller.dto.PersonDto;
 import com.myung9.spring.project1.Mycontact.domain.dto.Birthday;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Where;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
@@ -19,6 +21,7 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Data
+@Where(clause = "deleted = false")
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // data.sql을 이용해서 넣는 값과 personRepository에서 넣는값이 충돌나서 strategy를 설정
@@ -51,6 +54,9 @@ public class Person {
 
     @ToString.Exclude
     private String phoneNumber;
+
+    @ColumnDefault("0") // 0 : false
+    private boolean deleted;
 
 //    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})  // person entity에서 block에 대한 영속성을 함께 관리하겠다
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) // optional = false로 block객체의 값은 항상 필요하다
