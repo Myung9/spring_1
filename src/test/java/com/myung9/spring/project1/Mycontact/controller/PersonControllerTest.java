@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -47,9 +48,12 @@ class PersonControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private MappingJackson2HttpMessageConverter messageConverter;
+
     @BeforeEach
     void beforeEach(){
-        mockMvc = MockMvcBuilders.standaloneSetup(personController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(personController).setMessageConverters(messageConverter).build();
     }
 
     @Test
@@ -58,8 +62,25 @@ class PersonControllerTest {
                 MockMvcRequestBuilders.get("/api/person/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("martin"));
+                .andExpect(jsonPath("$.name").value("martin"))
+                .andExpect(jsonPath("$.hobby").isEmpty())
+                .andExpect(jsonPath("$.address").isEmpty())
+//                .andExpect(jsonPath("$.birthday.yearOfBirthday").value(1991))
+//                .andExpect(jsonPath("$.birthday.monthOfBirthday").value(8))
+//                .andExpect(jsonPath("$.birthday.dayOfBirthday").value(15))
+                .andExpect(jsonPath("$.birthday").value("1991-08-15"))
+                .andExpect(jsonPath("$.job").isEmpty())
+                .andExpect(jsonPath("$.phoneNumber").isEmpty())
+                .andExpect(jsonPath("$.deleted").value(false))
+                .andExpect(jsonPath("$.age").isNumber())
+                .andExpect(jsonPath("$.birthdayToday").isBoolean());
+
+        /*
+        jsonPath("$.name").value("martin"); // json객체에 대한검증
+        assertThat(result.getName()).isEqualTo("martin");   //java 객체에 대한 검증
+         */
     }
+
 
     @Test
     void postPerson() throws Exception{
