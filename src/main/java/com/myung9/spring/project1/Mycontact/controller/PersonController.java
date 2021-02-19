@@ -51,5 +51,6 @@ public class PersonController {
         personService.delete(id);
 
         log.info("person -> {}", personRepository.findAll());
+
     }
 }
