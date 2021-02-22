@@ -67,6 +67,7 @@ public class Person {
         if(personDto.getBirthday() != null){
             this.setBirthday(Birthday.of(personDto.getBirthday()));
         }
+
     }
 
 
