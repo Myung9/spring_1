@@ -18,7 +18,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /*서비스 테스트경우 보통 mocktest를 많이 사용*/
@@ -62,8 +61,7 @@ class PersonServiceTest {
     void put(){
         personService.put(mockPersonDto());
 
-        //지정한 mock들의 액션에 대한 검증 -> verify
-        verify(personRepository, times(1)).save(any(Person.class));
+        verify(personRepository, times(1)).save(argThat(new IsPersonWillBeInserted()));
     }
 
     @Test
@@ -100,6 +98,58 @@ class PersonServiceTest {
         return PersonDto.of("martin", "programming", "판교", LocalDate.now(), "programmer", "010-1234-1234");
     }
 
+    @Test
+    void modifyByNameIfPersonNotFound(){
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.empty());
+        assertThrows(RuntimeException.class, () -> personService.modify(1L, "martin"));
+    }
+
+    @Test
+    void modifyByName(){
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.of(new Person("martin")));
+
+        personService.modify(1L, "daniel");
+
+        verify(personRepository, times(1)).save(argThat(new IsNameWillBeUpdated()));
+    }
+
+    @Test
+    void deleteIfPersonNotFound(){
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> personService.delete(1L));
+    }
+
+    @Test
+    void delete(){
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.of(new Person("martin")));
+
+        personService.delete(1L);
+
+//        verify(personRepository, times(1)).save(any(Person.class));
+        verify(personRepository, times(1)).save(argThat(new IsPersonWillBeDeleted()));
+    }
+
+    private static class IsPersonWillBeInserted implements ArgumentMatcher<Person>{
+        @Override
+        public boolean matches(Person person) {
+            return equals(person.getName(), "martin")
+                    && equals(person.getHobby(), "programming")
+                    && equals(person.getAddress(), "판교")
+                    && equals(person.getBirthday(), Birthday.of(LocalDate.now()))
+                    && equals(person.getJob(), "programmer")
+                    && equals(person.getPhoneNumber(), "010-1234-1234");
+        }
+
+        private boolean equals(Object actual, Object expected){
+            return expected.equals(actual);
+        }
+    }
+
     //personService modify에서 set상황까지 test하기 위함
     private static class IsPersonWillBeUpdated implements ArgumentMatcher<Person> {
         @Override
@@ -114,6 +164,20 @@ class PersonServiceTest {
 
         private boolean equals(Object actual, Object expected){
             return expected.equals(actual);
+        }
+    }
+
+    private static class IsNameWillBeUpdated implements ArgumentMatcher<Person>{
+        @Override
+        public boolean matches(Person person) {
+            return person.getName().equals("daniel");
+        }
+    }
+
+    private static class IsPersonWillBeDeleted implements ArgumentMatcher<Person>{
+        @Override
+        public boolean matches(Person person) {
+            return person.isDeleted();
         }
     }
 }
