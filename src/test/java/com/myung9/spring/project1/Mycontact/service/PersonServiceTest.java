@@ -2,10 +2,12 @@ package com.myung9.spring.project1.Mycontact.service;
 
 import com.myung9.spring.project1.Mycontact.controller.dto.PersonDto;
 import com.myung9.spring.project1.Mycontact.domain.Person;
+import com.myung9.spring.project1.Mycontact.domain.dto.Birthday;
 import com.myung9.spring.project1.Mycontact.repository.PersonRepository;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -57,12 +60,60 @@ class PersonServiceTest {
 
     @Test
     void put(){
-        //실제 db값이 아닌 값을 가상처리해
-        PersonDto dto = PersonDto.of("martin", "programming", "판교", LocalDate.now(), "programmer", "010-1234-1234");
-
-        personService.put(dto);
+        personService.put(mockPersonDto());
 
         //지정한 mock들의 액션에 대한 검증 -> verify
         verify(personRepository, times(1)).save(any(Person.class));
+    }
+
+    @Test
+    void modifyIfPersonNotFound(){
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> personService.modify(1L, mockPersonDto()));
+    }
+
+    @Test
+    void modifyIfNameIsDifferent(){
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.of(new Person("tony")));
+
+        assertThrows(RuntimeException.class, () -> personService.modify(1L, mockPersonDto()));
+    }
+
+    @Test // modify가 성공적으로 수행되는지에 대한 test
+    void modify(){
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.of(new Person("martin")));
+
+        personService.modify(1L, mockPersonDto());
+
+        //void type에 경우에는 mockito를 활용해서 검증
+//        verify(personRepository, times(1)).save(any(Person.class));
+        // argThat : argment 대해서 검증
+        verify(personRepository, times(1)).save(argThat(new IsPersonWillBeUpdated()));
+
+    }
+
+    private PersonDto mockPersonDto(){
+        return PersonDto.of("martin", "programming", "판교", LocalDate.now(), "programmer", "010-1234-1234");
+    }
+
+    //personService modify에서 set상황까지 test하기 위함
+    private static class IsPersonWillBeUpdated implements ArgumentMatcher<Person> {
+        @Override
+        public boolean matches(Person person) {
+            return equals(person.getName(), "martin")
+                    && equals(person.getHobby(), "programming")
+                    && equals(person.getAddress(), "판교")
+                    && equals(person.getBirthday(), Birthday.of(LocalDate.now()))
+                    && equals(person.getJob(), "programmer")
+                    && equals(person.getPhoneNumber(), "010-1234-1234");
+        }
+
+        private boolean equals(Object actual, Object expected){
+            return expected.equals(actual);
+        }
     }
 }

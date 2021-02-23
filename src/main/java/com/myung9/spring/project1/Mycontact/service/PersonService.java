@@ -39,7 +39,7 @@ public class PersonService {
 
     @Transactional
     public void modify(Long id, @NotNull PersonDto personDto){
-        Person person = personRepository.findById(id).orElseThrow(() -> new RuntimeException("ID is not exist"));
+        Person person = personRepository.findById(id).orElseThrow(() -> new RuntimeException("아이디가 존재하지 않습니다."));
 
         if(!person.getName().equals(personDto.getName())){
             throw new RuntimeException("이름이 다릅니다.");
