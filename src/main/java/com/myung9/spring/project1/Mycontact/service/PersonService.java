@@ -2,6 +2,8 @@ package com.myung9.spring.project1.Mycontact.service;
 
 import com.myung9.spring.project1.Mycontact.controller.dto.PersonDto;
 import com.myung9.spring.project1.Mycontact.domain.Person;
+import com.myung9.spring.project1.Mycontact.exception.PersonNotFoundException;
+import com.myung9.spring.project1.Mycontact.exception.RenameNotPermittedException;
 import com.myung9.spring.project1.Mycontact.repository.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +41,10 @@ public class PersonService {
 
     @Transactional
     public void modify(Long id, @NotNull PersonDto personDto){
-        Person person = personRepository.findById(id).orElseThrow(() -> new RuntimeException("아이디가 존재하지 않습니다."));
+        Person person = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
 
         if(!person.getName().equals(personDto.getName())){
-            throw new RuntimeException("이름이 다릅니다.");
+            throw new RenameNotPermittedException();
         }
         person.set(personDto);
         personRepository.save(person);
@@ -50,8 +52,7 @@ public class PersonService {
 
     @Transactional
     public void modify(Long id, String name) { // id값을받아서 이름만 수정하는 로직
-        Person person = personRepository.findById(id).orElseThrow(()->new RuntimeException("아이디가 존재하지 않습니다."));
-
+        Person person = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
         person.setName(name);
         personRepository.save(person);
     }
@@ -59,7 +60,7 @@ public class PersonService {
     @Transactional
     public void delete(Long id){
 
-        Person person = personRepository.findById(id).orElseThrow(()-> new RuntimeException("아이디가 존재하지 않습니다."));
+        Person person = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
 
         person.setDeleted(true);
 
