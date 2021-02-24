@@ -122,6 +122,48 @@ class PersonControllerTest {
                 () -> assertThat(result.getPhoneNumber()).isEqualTo("010-0000-0000")
         );
     }
+    @Test
+    void postPersonIfNameIsNull() throws Exception{
+        PersonDto dto = new PersonDto();
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/person")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .characterEncoding("UTF-8")
+                        .content(toJsonString(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400)) // 입력파라미터가 다른경우 500보단 400에러가 깔끔함
+                .andExpect(jsonPath("$.message").value("이름은 필수값입니다."));
+    }
+
+    @Test
+    void postPersonIfNameIsEmptyString() throws Exception{
+        PersonDto dto = new PersonDto();
+        dto.setName("");
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/person")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(toJsonString(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("이름은 필수값입니다."));
+    }
+
+    @Test
+    void postPersonIfNameIsBlankString() throws Exception{
+        PersonDto dto = new PersonDto();
+        dto.setName(" ");
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/person")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(toJsonString(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("이름은 필수값입니다."));
+    }
 
     @Test
     void modifyPerson() throws Exception {
@@ -147,19 +189,6 @@ class PersonControllerTest {
         );
     }
 
-    @Test
-    void postPersonIfNameIsNull() throws Exception{
-        PersonDto dto = new PersonDto();
-
-        mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/person")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .characterEncoding("UTF-8")
-                        .content(toJsonString(dto)))
-        .andExpect(jsonPath("$.code").value(500))
-        .andExpect(jsonPath("$.message").value("알 수 없는 서버 오류가 발생하였습니다."));
-    }
 
     @Test
     void modifyPersonIfNameIsDifferent() throws  Exception{
