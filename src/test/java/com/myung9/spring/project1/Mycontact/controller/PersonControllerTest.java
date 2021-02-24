@@ -13,11 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.time.LocalDate;
 
@@ -29,14 +30,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-
-
 @Slf4j
 @SpringBootTest
 @Transactional
 class PersonControllerTest {
-    @Autowired
-    private PersonController personController;
 
     private MockMvc mockMvc;
 
@@ -49,13 +46,29 @@ class PersonControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+/*
     @Autowired
-    private MappingJackson2HttpMessageConverter messageConverter;
+    private WebApplicationContext ctx;
 
     @BeforeEach
+    public void setup() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx)
+                .addFilters(new CharacterEncodingFilter("UTF-8", true))  // 필터 추가
+                .alwaysDo(print())
+                .build();
+    }
+*/
+
+    @Autowired
+    private WebApplicationContext wac;
+
+
+    //.addFilters(new CharacterEncodingFilter("UTF-8", true))
+    @BeforeEach
     void beforeEach(){
-        mockMvc = MockMvcBuilders.standaloneSetup(personController)
-                .setMessageConverters(messageConverter)
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(wac)
+                .addFilters(new CharacterEncodingFilter("UTF-8", true))
                 .alwaysDo(print())
                 .build();
     }
@@ -91,6 +104,8 @@ class PersonControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/person")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .characterEncoding("UTF-8")
                         .content(toJsonString(dto)))
 //                .andExpect(status().isOk()); // 200ok
                 .andExpect(status().isCreated()); //201created
@@ -115,6 +130,8 @@ class PersonControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/person/1")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .characterEncoding("UTF-8")
                         .content(toJsonString(dto)))
                 .andExpect(status().isOk());
 
@@ -137,7 +154,9 @@ class PersonControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/person")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(toJsonString(dto)))
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .characterEncoding("UTF-8")
+                        .content(toJsonString(dto)))
         .andExpect(jsonPath("$.code").value(500))
         .andExpect(jsonPath("$.message").value("알 수 없는 서버 오류가 발생하였습니다."));
     }
@@ -149,7 +168,9 @@ class PersonControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/person/1")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(toJsonString(dto)))
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .characterEncoding("UTF-8")
+                        .content(toJsonString(dto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(400))
                 .andExpect(jsonPath("$.message").value("이름 변경이 허용되지 않습니다."));
@@ -162,6 +183,8 @@ class PersonControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/person/10")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .characterEncoding("UTF-8")
                 .content(toJsonString(dto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(400))
