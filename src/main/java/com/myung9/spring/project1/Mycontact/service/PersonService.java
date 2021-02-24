@@ -19,7 +19,10 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
-
+    public List<Person> getAll(){
+        return personRepository.findAll();
+    }
+    
     public List<Person> getPeopleByName(String name){
         return personRepository.findByName(name); //query 조건으로 where기능
     }

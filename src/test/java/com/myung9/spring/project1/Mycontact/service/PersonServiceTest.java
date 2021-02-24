@@ -31,6 +31,22 @@ class PersonServiceTest {
     private PersonRepository personRepository;
 
     @Test
+    void getAll(){
+        when(personRepository.findAll())
+                .thenReturn(Lists.newArrayList(
+                        new Person("martin"),
+                        new Person("dennis"),
+                        new Person("tony")
+                ));
+        List<Person> result = personService.getAll();
+
+        assertThat(result.size()).isEqualTo(3);
+        assertThat(result.get(0).getName()).isEqualTo("martin");
+        assertThat(result.get(1).getName()).isEqualTo("dennis");
+        assertThat(result.get(2).getName()).isEqualTo("tony");
+    }
+
+    @Test
     void getPeopleByName(){
         when(personRepository.findByName("martin"))
            .thenReturn(Lists.newArrayList(new Person("martin")));
