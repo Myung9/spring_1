@@ -23,7 +23,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -78,15 +77,16 @@ class PersonControllerTest {
     @Test
     void getAll() throws Exception{
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/person"))
+                MockMvcRequestBuilders.get("/api/person")
+        .param("page", "1")
+        .param("size", "2"))
+
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value(hasSize(6))) //리스트 객체
-                .andExpect(jsonPath("$.[0].name").value("martin")) // 0 index의 name
-                .andExpect(jsonPath("$.[1].name").value("david"))
-                .andExpect(jsonPath("$.[2].name").value("dennis"))
-                .andExpect(jsonPath("$.[3].name").value("sophia"))
-                .andExpect(jsonPath("$.[4].name").value("benny"))
-                .andExpect(jsonPath("$.[5].name").value("tony"))
+                .andExpect(jsonPath("$.totalPages").value(3)) //리스트 객체
+                .andExpect(jsonPath("$.totalElements").value(6))
+                .andExpect(jsonPath("$.numberOfElements").value(2))
+                .andExpect(jsonPath("$.content.[0].name").value("dennis"))
+                .andExpect(jsonPath("$.content.[1].name").value("sophia"))
         ;
     }
 
